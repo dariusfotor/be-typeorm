@@ -24,10 +24,12 @@ export const getBooks = async (req: Request, res: Response, next: NextFunction) 
         'photo',
         'evaluation',
         'numberOfPages',
+        'userId',
       ],
     });
     res.customSuccess(200, 'List of books.', books);
   } catch (error) {
+    console.log(error);
     const customError = new CustomError(400, 'Raw', `Can't retrieve list of books.`, null, error);
     return next(customError);
   }

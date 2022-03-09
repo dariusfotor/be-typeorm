@@ -44,4 +44,7 @@ export class Books {
 
   @Column()
   numberOfPages: string;
+
+  @Column()
+  userId: number;
 }
