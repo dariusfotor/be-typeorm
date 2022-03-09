@@ -1,3 +1,4 @@
+import bcrypt from 'bcryptjs';
 import { Request, Response, NextFunction } from 'express';
 import { getRepository } from 'typeorm';
 
@@ -19,10 +20,19 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
       return next(customError);
     }
 
-    if (!user.checkIfPasswordMatch(password)) {
-      const customError = new CustomError(404, 'General', 'Not Found', ['Incorrect email or password']);
-      return next(customError);
-    }
+    // if (!user.checkIfPasswordMatch(password)) {
+    //   const customError = new CustomError(404, 'General', 'Not Found', ['Incorrect email or password']);
+    //   console.log('err 25', customError);
+    //   return next(customError);
+    // }
+
+    bcrypt.compare(password, user.password, function (err, res) {
+      if (err) {
+        const customError = new CustomError(404, 'General', 'Not Found', ['Incorrect email or password']);
+        return next(customError);
+      }
+      console.log('RESSS', res);
+    });
 
     const jwtPayload: JwtPayload = {
       id: user.id,
@@ -31,7 +41,6 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
       role: user.role as Role,
       created_at: user.created_at,
     };
-
     try {
       const token = createJwtToken(jwtPayload);
       res.customSuccess(200, 'Token successfully created.', `Bearer ${token}`);
@@ -40,6 +49,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
       return next(customError);
     }
   } catch (err) {
+    console.log('err 46', err);
     const customError = new CustomError(400, 'Raw', 'Error', null, err);
     return next(customError);
   }

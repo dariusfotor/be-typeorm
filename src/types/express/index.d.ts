@@ -9,7 +9,7 @@ declare global {
       language: Language;
     }
     export interface Response {
-      customSuccess(httpStatusCode: number, message: string, data?: any): Response;
+      customSuccess(httpStatusCode: number, message: string, data?: any, success?: boolean): Response;
     }
   }
 }
