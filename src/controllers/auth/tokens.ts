@@ -6,7 +6,8 @@ import { CustomError } from 'utils/response/custom-error/CustomError';
 export const authenticateToken = async (req: Request, res: Response, next: NextFunction) => {
   try {
     let accessToken = req.headers['authorization'];
-    accessToken = accessToken && accessToken.split('')[1];
+    console.log(accessToken);
+    accessToken = accessToken && accessToken.split(' ')[1];
     if (!accessToken) {
       const customError = new CustomError(401, 'Raw', 'Error accessToken not found');
       return next(customError);

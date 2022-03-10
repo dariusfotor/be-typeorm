@@ -5,7 +5,7 @@ import { getBooks, saveBook } from 'controllers/books';
 
 const router = Router();
 
-router.get('/', getBooks);
+router.get('/', authenticateToken, getBooks);
 router.post('/createbook', saveBook);
 
 export default router;

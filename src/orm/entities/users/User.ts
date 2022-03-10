@@ -56,6 +56,9 @@ export class User {
   }
 
   checkIfPasswordMatch(unencryptedPassword: string) {
-    return bcrypt.compareSync(unencryptedPassword, this.password);
+    console.log('fe bcrypt', bcrypt.hashSync(unencryptedPassword, 8));
+    console.log('ateina is fe', unencryptedPassword);
+    console.log('duombazes pass', this.password.toString());
+    return bcrypt.compareSync(unencryptedPassword, this.password.toString());
   }
 }

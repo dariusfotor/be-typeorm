@@ -9,6 +9,7 @@ export const getBooks = async (req: Request, res: Response, next: NextFunction) 
   const booksRepository = getRepository(Books);
   try {
     const books = await booksRepository.find({
+      where: { userId: req.body.user.id },
       select: [
         'id',
         'name',
