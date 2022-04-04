@@ -26,6 +26,7 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
       newUser.username = username;
       newUser.created_at = new Date();
       newUser.updated_at = new Date();
+      newUser.language = 'ltu';
       newUser.role = role;
       newUser.hashPassword();
       await userRepository.save(newUser);

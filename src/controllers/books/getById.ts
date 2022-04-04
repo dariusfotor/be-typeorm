@@ -5,13 +5,12 @@ import { CustomError } from 'utils/response/custom-error/CustomError';
 
 import { Book } from '../../orm/entities/books/Book';
 
-export const getBooks = async (req: Request, res: Response, next: NextFunction) => {
+export const getBookById = async (req: Request, res: Response, next: NextFunction) => {
   const booksRepository = getRepository(Book);
-  const id = req.query.userId;
+  const id = req.params.id;
   try {
-    const books = await booksRepository.find({
-      where: { userId: id },
-      order: { createdAt: 'DESC' },
+    const book = await booksRepository.findOne({
+      where: { id: id },
       select: [
         'id',
         'name',
@@ -32,7 +31,7 @@ export const getBooks = async (req: Request, res: Response, next: NextFunction) 
         'isReading',
       ],
     });
-    res.customSuccess(200, 'List of books.', books);
+    res.customSuccess(200, 'One book.', book);
   } catch (error) {
     const customError = new CustomError(400, 'Raw', `Can't retrieve list of books.`, null, error);
     return next(customError);

@@ -5,7 +5,7 @@ import { Role, Language } from './types';
 
 @Entity('users')
 export class User {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('increment')
   id: number;
 
   @Column({
@@ -56,9 +56,6 @@ export class User {
   }
 
   checkIfPasswordMatch(unencryptedPassword: string) {
-    console.log('fe bcrypt', bcrypt.hashSync(unencryptedPassword, 8));
-    console.log('ateina is fe', unencryptedPassword);
-    console.log('duombazes pass', this.password.toString());
     return bcrypt.compareSync(unencryptedPassword, this.password.toString());
   }
 }
