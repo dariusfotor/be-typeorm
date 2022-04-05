@@ -11,17 +11,17 @@ import { CustomError } from 'utils/response/custom-error/CustomError';
 export const authenticateToken = async (req: Request, res: Response, next: NextFunction) => {
   try {
     let accessToken = req.headers['authorization'];
-    accessToken = accessToken && accessToken.split(' ')[1];
     if (!accessToken) {
       const customError = new CustomError(401, 'Raw', 'Error accessToken not found');
       return next(customError);
     }
-    jwt.verify(accessToken, process.env.JWT_SECRET, (err, user) => {
+    accessToken = accessToken && accessToken.split(' ')[1];
+    jwt.verify(accessToken, process.env.JWT_SECRET as string, (err, user) => {
       if (err) {
         const customError = new CustomError(403, 'Raw', 'Error', null, err);
         return next(customError);
       } else {
-        req.body.user = user;
+        // req.body.user = user;
         next();
       }
     });
@@ -34,8 +34,7 @@ export const authenticateToken = async (req: Request, res: Response, next: NextF
 export const refreshToken = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const tokenRepository = getRepository(Token);
-    let refreshToken = req.body.token;
-    refreshToken = refreshToken && refreshToken.split(' ')[1];
+    const refreshToken = req.body.token;
     const refreshTokenFromDB = await tokenRepository.findOne({ where: { refreshToken } });
     jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN, async (err, user) => {
       if (err) {
